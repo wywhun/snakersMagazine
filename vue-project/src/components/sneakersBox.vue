@@ -7,7 +7,8 @@
             <h3>{{ title }}</h3>
             <p>Категория: {{ category }}</p>
             <p>Цена: {{ price.toLocaleString('ru-RU') }}₽</p>
-            <button class="add-basket" @click="$emit('add-basket-product', id)" >Добавить в корзину 🛒</button>
+            <p>В наличии:  {{ count }}</p>
+            <button :disabled="count === 'Нет в наличии'" class="add-basket"  @click="$emit('add-basket-product', id)" >Добавить в корзину 🛒</button>
         </div>
     </div>
 </template>
@@ -24,7 +25,7 @@
             isAdded: Boolean,
             count: Number,
             foto: String,
-        }
+        },
     }
 </script>
 
