@@ -11,6 +11,9 @@
         <button class="btn-nav">Menu</button>
       </nav>
     </header>
+    <div class="input-sneaker">
+      <input v-model="inputText" class="text-input" type="text" placeholder="Введите название"/>
+    </div>
     <div class="check-basket">
       <button class="basket">🛒</button>
       <Transition name="fade">
@@ -19,7 +22,7 @@
     </div>
 
     <div class="all-cards">
-      <sneakersBox v-for="sneaker in sneakers" :key="sneaker.id" :title="sneaker.title" :category="sneaker.category" :price="sneaker.price" :foto="sneaker.foto" :count="sneaker.count"  @add-basket-product="addProduct(), visibleButton(), counterSneaker(sneaker.id)"></sneakersBox>
+      <sneakersBox v-for="sneaker in showInputCard" :key="sneaker.id" :title="sneaker.title" :category="sneaker.category" :price="sneaker.price" :foto="sneaker.foto" :count="sneaker.count"  @add-basket-product="addProduct(), visibleButton(), counterSneaker(sneaker.id)"></sneakersBox>
     </div>
   </div>
 </template>
@@ -44,8 +47,18 @@
 
         counterBasket: 0,
         isVisible: true,
+        inputText: '',
+        newInputArr: []
       }
     }, 
+    computed: {
+       showInputCard(){
+        return this.sneakers.filter((sneaker) => {
+          return sneaker.title.toLowerCase().includes(this.inputText)
+        })
+      }
+    },
+
     methods: {
       addProduct(){
         return this.counterBasket++;
@@ -59,7 +72,7 @@
         if (countSneaker.count === 0){
           countSneaker.count = 'Нет в наличии';
         }
-      }
+      },
     }
   }
 </script>
@@ -71,6 +84,14 @@
         font-weight: 700;
         font-style: normal;
     }
+
+  @font-face {
+        font-family: 'PlusJakartaSans';
+        src: url(../fonts/PlusJakartaSans-Regular.ttf) format('truetype');
+        font-weight: 400;
+        font-style: normal;
+    }
+
   *{
 
     box-sizing: border-box;
@@ -87,7 +108,10 @@
 
   .all-cards{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
     margin-left: 10vh;
     margin-right: 10vh ;
     gap: 30px;
@@ -100,7 +124,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin: 20px 40px 30px 20px;
+    margin: 20px 40px 15px 20px;
     font-family: 'PlusJakartaSansBold', sans-serif;
   
   }
@@ -111,11 +135,11 @@
     
   }
   .check-basket{
-    position: sticky;
+    position: fixed;
     display: flex;
     justify-content: flex-end;
-    top: 92vh;
-    margin-top: -50px;
+    bottom: 30px;
+    right: 5px;
   }
 
   .basket-count-box-text{
@@ -134,11 +158,12 @@
     border: none;
     margin-right: 10px;
     border-radius: 50%;
-    padding: 12px 12px; 
+    padding: 12px 15px; 
     cursor: pointer;
     transition: transform 0.3s ease;
     transition: background-color 0.3s ease;
     font-size: 17px;
+    aspect-ratio: 1 / 1;
   }
 
   .basket:hover{
@@ -157,18 +182,27 @@
     opacity: 0;
   }
 
+  .input-sneaker{
+    display: flex;
+    justify-content: center;
 
-  @media (max-width: 719px) {
-    .all-cards{
-      grid-template-columns: repeat(2, 1fr);
-      margin-left: 7vh;
-      margin-right: 7vh ;
   }
+  .text-input{
+    max-width: 100%;
+    color: rgb(255, 255, 255);
+    margin-bottom: 30px;
+    padding: 10px 40px;
+    background-color:#1F232D;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    outline: none;
+    text-align: center;
+    font-family: 'PlusJakartaSans', sans-serif;
+    field-sizing: content;
   }
 
    @media (max-width: 499px) {
     .all-cards{
-      grid-template-columns:  1fr;
       margin-left: 4vh;
       margin-right: 4vh ;
   }
