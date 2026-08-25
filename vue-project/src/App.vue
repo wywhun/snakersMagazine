@@ -13,6 +13,14 @@
     </header>
     <div class="input-sneaker">
       <input v-model="inputText" class="text-input" type="text" placeholder="Введите название"/>
+      <div class="select-category-box">
+        <select class="select-category" v-model="selctedCategory">
+          <option class="select-option-category" selected>Все</option>
+          <option class="select-option-category" >Nike</option>
+          <option class="select-option-category">Adidas</option>
+          <option class="select-option-category">New Balance</option>
+        </select>
+      </div>
     </div>
     <div class="check-basket">
       <button class="basket">🛒</button>
@@ -48,13 +56,18 @@
         counterBasket: 0,
         isVisible: true,
         inputText: '',
-        newInputArr: []
+        newInputArr: [],
+        selctedCategory: 'Все'
       }
     }, 
     computed: {
        showInputCard(){
         return this.sneakers.filter((sneaker) => {
-          return sneaker.title.toLowerCase().includes(this.inputText)
+          const titleFilter = sneaker.title.toLowerCase().includes(this.inputText);
+
+          const categoryFilter = this.selctedCategory === 'Все' || sneaker.category === this.selctedCategory;
+
+          return titleFilter && categoryFilter
         })
       }
     },
@@ -72,7 +85,7 @@
         if (countSneaker.count === 0){
           countSneaker.count = 'Нет в наличии';
         }
-      },
+      }
     }
   }
 </script>
@@ -108,7 +121,7 @@
 
   .all-cards{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 500px));
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -183,10 +196,18 @@
   }
 
   .input-sneaker{
+    position: relative;
     display: flex;
     justify-content: center;
-
+   
   }
+
+  .select-category-box {
+    position: absolute;
+    right: 40px;
+  }
+
+
   .text-input{
     max-width: 100%;
     color: rgb(255, 255, 255);
@@ -201,7 +222,20 @@
     field-sizing: content;
   }
 
-   @media (max-width: 499px) {
+  .select-option-category{
+    color: rgb(255, 255, 255);
+  }
+
+  .select-category{
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    height: 10%;
+    border-radius: 8px;
+    background-color:#1F232D;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+   @media (max-width: 550px) {
     .all-cards{
       margin-left: 4vh;
       margin-right: 4vh ;
@@ -218,6 +252,21 @@
   }
     .header-category{
       display: none;
+    }
+
+    .input-sneaker {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .select-category-box {
+      position: static;
+      margin-bottom: 20px;
+    }
+
+    .text-input {
+      margin-bottom: 15px;
     }
   }
 </style>
