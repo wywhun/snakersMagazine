@@ -23,24 +23,28 @@
       </div>
     </div>
     <div class="check-basket">
-      <button class="basket">🛒</button>
+      <button @click="openBasket" class="basket">🛒</button>
       <Transition name="fade">
         <p v-show="counterBasket > 0" class="basket-count-box-text">{{ counterBasket }}</p>
       </Transition>
     </div>
 
     <div class="all-cards">
-      <sneakersBox v-for="sneaker in showInputCard" :key="sneaker.id" :title="sneaker.title" :category="sneaker.category" :price="sneaker.price" :foto="sneaker.foto" :count="sneaker.count"  @add-basket-product="addProduct(), visibleButton(), counterSneaker(sneaker.id)"></sneakersBox>
+      <sneakersBox v-for="sneaker in showInputCard" :key="sneaker.id" :title="sneaker.title" :category="sneaker.category" :price="sneaker.price" :foto="sneaker.foto" :count="sneaker.count" :isAdded="sneaker.isAdded" @add-basket-product="addProduct(), visibleButton(), counterSneaker(sneaker.id)"></sneakersBox>
     </div>
+
+    <basketModalWindow v-if="openBask"></basketModalWindow>
+  
   </div>
 </template>
 
 <script>
   import sneakersBox from './components/sneakersBox.vue';
   import foto1 from './assets/foto1.png';
+  import basketModalWindow from './components/basketModalWindow.vue';
 
   export default{
-    components: {sneakersBox},
+    components: {sneakersBox, basketModalWindow},
     data(){
       return {
         sneakers: [
@@ -54,6 +58,7 @@
           {id: 8,title: "New Balance 9060 Dark",category: "New Balance",price: 21990,isFavorite: false,isAdded: false,count: 9, foto: foto1}],
 
         counterBasket: 0,
+        openBask: false,
         isVisible: true,
         inputText: '',
         newInputArr: [],
@@ -84,6 +89,16 @@
         countSneaker.count--
         if (countSneaker.count === 0){
           countSneaker.count = 'Нет в наличии';
+        }
+      },
+      openBasket(){
+        if (this.openBask === false){
+          this.openBask = true
+          console.log('Видно модальное окно')
+        }
+        else{
+          this.openBask = false
+          console.log('Не видно модальное окно')
         }
       }
     }
@@ -120,6 +135,7 @@
   }
 
   .all-cards{
+    position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 500px));
     justify-content: center;
@@ -128,9 +144,15 @@
     margin-left: 10vh;
     margin-right: 10vh ;
     gap: 30px;
+    z-index: 10;
   }
   .btn-nav{
     display: none;
+  }
+
+  .modal-window{
+    position: sticky;
+    margin-right: 10px;
   }
 
   .header-magazine{
@@ -153,6 +175,7 @@
     justify-content: flex-end;
     bottom: 30px;
     right: 5px;
+    z-index: 910;
   }
 
   .basket-count-box-text{
@@ -234,6 +257,8 @@
     background-color:#1F232D;
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
+
+
 
    @media (max-width: 550px) {
     .all-cards{
