@@ -33,7 +33,7 @@
       <sneakersBox v-for="sneaker in showInputCard" :key="sneaker.id" :title="sneaker.title" :category="sneaker.category" :price="sneaker.price" :foto="sneaker.foto" :count="sneaker.count" :isAdded="sneaker.isAdded" @add-basket-product="addProduct(), visibleButton(), counterSneaker(sneaker.id)"></sneakersBox>
     </div>
 
-    <basketModalWindow v-if="openBask"></basketModalWindow>
+    <basketModalWindow v-if="openBask"  ></basketModalWindow>
   
   </div>
 </template>
@@ -74,11 +74,16 @@
 
           return titleFilter && categoryFilter
         })
+      },
+
+      addBasket(){
+        return this.sneakers.filter(sneaker => sneaker.isAdded)
       }
     },
 
     methods: {
       addProduct(){
+        this.isAdded = true;
         return this.counterBasket++;
       },
       visibleButton(){
@@ -137,7 +142,7 @@
   .all-cards{
     position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 500px));
+    grid-template-columns: repeat(3, minmax(280px, 500px));
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -259,12 +264,32 @@
   }
 
 
-
-   @media (max-width: 550px) {
+  @media (max-width: 950px) {
     .all-cards{
+      grid-template-columns: repeat(2, minmax(280px, 500px));
       margin-left: 4vh;
       margin-right: 4vh ;
   }
+
+    .modal-win{
+        width: 30%;
+        height: 60vh;
+       
+    }
+  }
+
+   @media (max-width: 614px) {
+    .all-cards{
+      grid-template-columns: repeat(1, minmax(280px, 500px));
+      margin-left: 4vh;
+      margin-right: 4vh ;
+  }
+
+    .modal-win{
+        width: 35%;
+        height: 60vh;
+       
+    }
     .btn-nav{
       position: relative;
       display: block;
